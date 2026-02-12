@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery} from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
 import type { Note } from '../../types/note';
 import NoteList from '../NoteList/NoteList';
@@ -18,7 +18,6 @@ export default function App() {
   const [search, setSearch] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const queryClient = useQueryClient();
 
   const handleSearch = useDebouncedCallback((value: string) => {
     setSearch(value);
