@@ -69,13 +69,10 @@ export default function App() {
 
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>
-          <NoteForm
-            onSuccess={() => {
-              queryClient.invalidateQueries({ queryKey: ['notes'] });
-              setIsModalOpen(false);
-            }}
-            onClose={() => setIsModalOpen(false)}
-          />
+         <NoteForm
+  onClose={() => setIsModalOpen(false)}
+/>
+
         </Modal>
       )}
 
