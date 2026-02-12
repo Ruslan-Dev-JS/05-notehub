@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery} from '@tanstack/react-query';
-import { fetchNotes } from '../../services/noteService';
-import type { Note } from '../../types/note';
+import { fetchNotes } from '../../../services/noteService';
+import type { Note } from '../../../types/note';
 import NoteList from '../NoteList/NoteList';
 import Modal from '../Modal/Modal';
 import NoteForm from '../NoteForm/NoteForm';
