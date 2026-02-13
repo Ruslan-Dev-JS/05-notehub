@@ -1,5 +1,6 @@
 import axios from 'axios';
-import type { FetchNotesResponse } from '../types/note';
+import type { Note } from '../types/note';
+import type { FetchNotesResponse } from '../types/api';
 
 const token = import.meta.env.VITE_NOTEHUB_TOKEN;
 
@@ -11,9 +12,9 @@ const instance = axios.create({
 });
 
 interface FetchNotesParams {
-  page: number;
-  perPage: number;
-  search: string;
+  page?: number;       
+  perPage?: number;     
+  search?: string;      
 }
 
 export const fetchNotes = async ({
@@ -21,32 +22,33 @@ export const fetchNotes = async ({
   perPage,
   search,
 }: FetchNotesParams): Promise<FetchNotesResponse> => {
-  const params: Record<string, string | number> = {
-    page,
-    perPage,
-  };
+  const params: Record<string, string | number> = {};
 
-  if (search) {
-    params.search = search;
-  }
+  if (page !== undefined) params.page = page;
+  if (perPage !== undefined) params.perPage = perPage;
+  if (search) params.search = search;
 
-  const response = await instance.get('/notes', { params });
+  const { data } = await instance.get<FetchNotesResponse>('/notes', {
+    params,
+  });
 
-  return response.data;
+  return data;
 };
 
-
-export const deleteNote = async (id: string) => {
-  const response = await instance.delete(`/notes/${id}`);
-  return response.data;
+export const deleteNote = async (id: string): Promise<Note> => {
+  const { data } = await instance.delete<Note>(`/notes/${id}`);
+  return data;
 };
 
 interface CreateNoteData {
   title: string;
   content: string;
+  tag: 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping'; 
 }
 
-export const createNote = async (data: CreateNoteData) => {
-  const response = await instance.post('/notes', data);
-  return response.data;
+export const createNote = async (
+  payload: CreateNoteData
+): Promise<Note> => {
+  const { data } = await instance.post<Note>('/notes', payload);
+  return data;
 };

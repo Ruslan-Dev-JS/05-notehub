@@ -8,10 +8,18 @@ interface NoteFormProps {
   onClose: () => void;
 }
 
+type Tag = 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
+
+interface NoteFormValues {
+  title: string;
+  content: string;
+  tag: Tag;
+}
+
 const schema = Yup.object({
   title: Yup.string().min(3).max(50).required(),
-  content: Yup.string().max(500),
-  tag: Yup.string()
+  content: Yup.string().max(500).required(),
+  tag: Yup.mixed<Tag>()
     .oneOf(['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'])
     .required(),
 });
@@ -28,10 +36,14 @@ export default function NoteForm({ onClose }: NoteFormProps) {
   });
 
   return (
-    <Formik
-      initialValues={{ title: '', content: '', tag: 'Todo' }}
+    <Formik<NoteFormValues>
+      initialValues={{
+        title: '',
+        content: '',
+        tag: 'Todo',
+      }}
       validationSchema={schema}
-      onSubmit={values => mutation.mutate(values)}
+      onSubmit={(values) => mutation.mutate(values)}
     >
       <Form className={css.form}>
         <div className={css.formGroup}>
@@ -67,7 +79,9 @@ export default function NoteForm({ onClose }: NoteFormProps) {
           <button type="button" onClick={onClose}>
             Cancel
           </button>
-          <button type="submit">Create note</button>
+          <button type="submit" disabled={mutation.isPending}>
+            {mutation.isPending ? 'Creating...' : 'Create note'}
+          </button>
         </div>
       </Form>
     </Formik>
