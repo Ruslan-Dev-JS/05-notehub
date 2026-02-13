@@ -18,7 +18,7 @@ interface NoteFormValues {
 
 const schema = Yup.object({
   title: Yup.string().min(3).max(50).required(),
-  content: Yup.string().max(500).required(),
+  content: Yup.string().max(500), // ✅ БЕЗ required()
   tag: Yup.mixed<Tag>()
     .oneOf(['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'])
     .required(),
